@@ -1,0 +1,1 @@
+Package glogger provides a simple logger for Go, logs in file or console.
