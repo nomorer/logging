@@ -57,10 +57,6 @@ func (drl *DailyRotateLogger) GetBackupFilename(filename string) string {
 }
 
 func NewRotateLogger(filename string, level int) (*RotateLogger, error) {
-	if filename == "" {
-		return nil, nil
-	}
-
 	l := &RotateLogger{
 		filename: filename,
 		rule: &DailyRotateLogger{

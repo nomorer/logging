@@ -2,7 +2,6 @@ package glogger
 
 import (
 	"fmt"
-	"log"
 	"time"
 )
 
@@ -82,13 +81,9 @@ func output(writer *RotateLogger, level int, content string) {
 	}
 
 	logContent := fmt.Sprintf(defaultformatString, time.Now().Format(defaultTimeFormat), LevelName[level], content)
-	if writer != nil {
-		buf := make([]byte, len(logContent))
-		copy(buf, logContent)
-		writer.Write(buf)
-	} else {
-		log.Print(logContent)
-	}
+	buf := make([]byte, len(logContent))
+	copy(buf, logContent)
+	writer.Write(buf)
 }
 
 func Close() error {
