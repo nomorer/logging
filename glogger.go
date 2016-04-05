@@ -23,43 +23,43 @@ var (
 )
 
 func Debug(v ...interface{}) {
-	output(writer, LevelDebug, fmt.Sprintln(v...))
+	output(LevelDebug, fmt.Sprintln(v...))
 }
 
 func Debugf(format string, v ...interface{}) {
-	output(writer, LevelDebug, fmt.Sprintln(fmt.Sprintf(format, v...)))
+	output(LevelDebug, fmt.Sprintln(fmt.Sprintf(format, v...)))
 }
 
 func Info(v ...interface{}) {
-	output(writer, LevelInfo, fmt.Sprintln(v...))
+	output(LevelInfo, fmt.Sprintln(v...))
 }
 
 func Infof(format string, v ...interface{}) {
-	output(writer, LevelInfo, fmt.Sprintln(fmt.Sprintf(format, v...)))
+	output(LevelInfo, fmt.Sprintln(fmt.Sprintf(format, v...)))
 }
 
 func Warn(v ...interface{}) {
-	output(writer, LevelWarn, fmt.Sprintln(v...))
+	output(LevelWarn, fmt.Sprintln(v...))
 }
 
 func Warnf(format string, v ...interface{}) {
-	output(writer, LevelWarn, fmt.Sprintln(fmt.Sprintf(format, v...)))
+	output(LevelWarn, fmt.Sprintln(fmt.Sprintf(format, v...)))
 }
 
 func Error(v ...interface{}) {
-	output(writer, LevelError, fmt.Sprintln(v...))
+	output(LevelError, fmt.Sprintln(v...))
 }
 
 func Errorf(format string, v ...interface{}) {
-	output(writer, LevelError, fmt.Sprintln(fmt.Sprintf(format, v...)))
+	output(LevelError, fmt.Sprintln(fmt.Sprintf(format, v...)))
 }
 
 func Fatal(v ...interface{}) {
-	output(writer, LevelFatal, fmt.Sprintln(v...))
+	output(LevelFatal, fmt.Sprintln(v...))
 }
 
 func Fatalf(format string, v ...interface{}) {
-	output(writer, LevelFatal, fmt.Sprintln(fmt.Sprintf(format, v...)))
+	output(LevelFatal, fmt.Sprintln(fmt.Sprintf(format, v...)))
 }
 
 func Setup(path string, level int) error {
@@ -75,7 +75,7 @@ func SetLevel(level int) {
 	writer.SetLevel(level)
 }
 
-func output(writer *RotateLogger, level int, content string) {
+func output(level int, content string) {
 	if level < writer.GetLevel() {
 		return
 	}
