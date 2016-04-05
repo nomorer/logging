@@ -46,4 +46,4 @@ and output like this:
 Install
 =============
 `go get github.com/justgolang/glogger`  
-Use `go get -u` to update the package.  
+use `go get -u` to update the package.  

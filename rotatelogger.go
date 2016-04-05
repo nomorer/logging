@@ -39,27 +39,27 @@ type (
 		waitGroup sync.WaitGroup
 	}
 
-	DailyRotateLogger struct {
+	DailyRotateRule struct {
 		rotateTime string
 	}
 )
 
-func (drl *DailyRotateLogger) ShallRotate() bool {
-	return drl.rotateTime != getNowDate() && len(drl.rotateTime) > 0
+func (drr *DailyRotateRule) ShallRotate() bool {
+	return drr.rotateTime != getNowDate() && len(drr.rotateTime) > 0
 }
 
-func (drl *DailyRotateLogger) SetRotateTime() {
-	drl.rotateTime = getNowDate()
+func (drr *DailyRotateRule) SetRotateTime() {
+	drr.rotateTime = getNowDate()
 }
 
-func (drl *DailyRotateLogger) GetBackupFilename(filename string) string {
+func (drr *DailyRotateRule) GetBackupFilename(filename string) string {
 	return fmt.Sprintf("%s-%s", filename, getNowDate())
 }
 
 func NewRotateLogger(filename string, level int) (*RotateLogger, error) {
 	l := &RotateLogger{
 		filename: filename,
-		rule: &DailyRotateLogger{
+		rule: &DailyRotateRule{
 			rotateTime: getNowDate(),
 		},
 		level:   level,
