@@ -29,10 +29,14 @@ type (
 		filename       string
 		backupFilename string
 		rule           RotateRule
-		fp             *os.File
-		channel        chan []byte
-		done           chan bool
-		waitGroup      sync.WaitGroup
+
+		level int
+
+		fp      *os.File
+		channel chan []byte
+		done    chan bool
+
+		waitGroup sync.WaitGroup
 	}
 
 	DailyRotateLogger struct {
@@ -52,14 +56,19 @@ func (drl *DailyRotateLogger) GetBackupFilename(filename string) string {
 	return fmt.Sprintf("%s-%s", filename, getNowDate())
 }
 
-func NewRotateLogger(filename string) (*RotateLogger, error) {
+func NewRotateLogger(filename string, level int) (*RotateLogger, error) {
+	if filename == "" {
+		return nil, nil
+	}
+
 	l := &RotateLogger{
 		filename: filename,
-		rule:     &DailyRotateLogger{
+		rule: &DailyRotateLogger{
 			rotateTime: getNowDate(),
 		},
-		channel:  make(chan []byte, bufferSize),
-		done:     make(chan bool),
+		level:   level,
+		channel: make(chan []byte, bufferSize),
+		done:    make(chan bool),
 	}
 
 	if err := l.init(); err != nil {
@@ -150,6 +159,14 @@ func (rl *RotateLogger) write(content []byte) {
 	if rl.fp != nil {
 		rl.fp.Write(content)
 	}
+}
+
+func (rl *RotateLogger) SetLevel(level int) {
+	rl.level = level
+}
+
+func (rl *RotateLogger) GetLevel() int {
+	return rl.level
 }
 
 func (rl *RotateLogger) Close() error {
