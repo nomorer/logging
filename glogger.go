@@ -2,8 +2,8 @@ package glogger
 
 import (
 	"fmt"
-	"time"
 	"log"
+	"time"
 )
 
 const (
@@ -18,9 +18,9 @@ const (
 )
 
 var (
-	//log level:DEBUG < INFO < WARN < ERROR < FATAL
-    LevelName [5]string = [5]string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
-	writer *RotateLogger
+	// higher means more serious, log level : DEBUG < INFO < WARN < ERROR < FATAL
+	LevelName [5]string = [5]string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
+	writer    *RotateLogger
 )
 
 func Debug(v ...interface{}) {

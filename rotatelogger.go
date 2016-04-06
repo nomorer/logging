@@ -2,7 +2,6 @@ package glogger
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"path"
@@ -11,7 +10,6 @@ import (
 )
 
 const (
-	dailyDateFormat      = "2006-01-02"
 	maxWaitTime          = 100 * time.Millisecond
 	bufferSize           = 100
 	defaultFileMode      = 0600
@@ -19,12 +17,6 @@ const (
 )
 
 type (
-	RotateRule interface {
-		ShallRotate() bool
-		SetRotateTime()
-		GetBackupFilename(filename string) string
-	}
-
 	RotateLogger struct {
 		filename       string
 		backupFilename string
@@ -32,46 +24,30 @@ type (
 
 		level int
 
-		fp      *os.File
-		channel chan []byte
-		done    chan bool
+		fp   *os.File
+		msg  chan []byte
+		done chan bool
 
 		waitGroup sync.WaitGroup
 	}
-
-	DailyRotateRule struct {
-		rotateTime string
-	}
 )
-
-func (drr *DailyRotateRule) ShallRotate() bool {
-	return drr.rotateTime != getNowDate() && len(drr.rotateTime) > 0
-}
-
-func (drr *DailyRotateRule) SetRotateTime() {
-	drr.rotateTime = getNowDate()
-}
-
-func (drr *DailyRotateRule) GetBackupFilename(filename string) string {
-	return fmt.Sprintf("%s-%s", filename, getNowDate())
-}
 
 func NewRotateLogger(filename string, level int) (*RotateLogger, error) {
 	l := &RotateLogger{
 		filename: filename,
 		rule: &DailyRotateRule{
-			rotateTime: getNowDate(),
+			rotateTime: getCurrentDailyFormatDate(),
 		},
-		level:   level,
-		channel: make(chan []byte, bufferSize),
-		done:    make(chan bool),
+		level: level,
+		msg:   make(chan []byte, bufferSize),
+		done:  make(chan bool),
 	}
 
 	if err := l.init(); err != nil {
 		return nil, err
 	}
 
-	l.start()
+	l.run()
 	return l, nil
 }
 
@@ -94,7 +70,7 @@ func (rl *RotateLogger) init() error {
 	return nil
 }
 
-func (rl *RotateLogger) start() {
+func (rl *RotateLogger) run() {
 	rl.waitGroup.Add(1)
 
 	go func() {
@@ -102,10 +78,14 @@ func (rl *RotateLogger) start() {
 
 		for {
 			select {
-			case event, ok := <-rl.channel:
+			case msg, ok := <-rl.msg:
 				if ok {
-					rl.write(event)
+					rl.write(msg)
 				} else {
+					return
+				}
+			case <-rl.done:
+				if len(rl.msg) == 0 {
 					return
 				}
 			}
@@ -134,9 +114,10 @@ func (rl *RotateLogger) rotate() error {
 func (rl *RotateLogger) Write(content []byte) (int, error) {
 	select {
 	case <-rl.done:
+		return 0, errors.New("Error: log file closed")
 	default:
 		select {
-		case rl.channel <- content:
+		case rl.msg <- content:
 			return len(content), nil
 		case <-time.After(maxWaitTime):
 			return 0, errors.New("Timeout on writting log")
@@ -150,6 +131,8 @@ func (rl *RotateLogger) write(content []byte) {
 	if rl.rule.ShallRotate() {
 		if err := rl.rotate(); err != nil {
 			log.Println(err)
+		} else {
+			rl.rule.SetRotateTime()
 		}
 	}
 	if rl.fp != nil {
@@ -167,14 +150,10 @@ func (rl *RotateLogger) GetLevel() int {
 
 func (rl *RotateLogger) Close() error {
 	close(rl.done)
-	close(rl.channel)
+	close(rl.msg)
 	rl.waitGroup.Wait()
 	if err := rl.fp.Sync(); err != nil {
 		return err
 	}
 	return rl.fp.Close()
-}
-
-func getNowDate() string {
-	return time.Now().Format(dailyDateFormat)
 }
