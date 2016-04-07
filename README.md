@@ -1,37 +1,42 @@
-Package glogger provides a simple logger for Go, logs in file or console.
+Package glogger provides a simple logger with level and log rotation for Go.
 Example
 =============
     package main
     
     import (
-    	"github.com/justgolang/glogger"
     	"fmt"
+    	log "github.com/justgolang/glogger"
     )
     
     func main() {
     	path := "/home/mckee/program/go/src/test/logs/test.log"
-    	if err := glogger.Setup(path, glogger.LevelDebug); err != nil {
+    	if err := log.Setup(path, log.LevelDebug, log.HourlyRotate); err != nil {
     		fmt.Print(err)
     		return
     	}
-    	defer glogger.Close()
+    	defer func() {
+    		log.Close()
+    	}()
     
-    	glogger.Debug("ddd")
-    	glogger.Debugf("ddd%d", 444)
-    	glogger.Info("aaa")
-    	glogger.Infof("aaa%d", 111)
+    	log.Debug("ddd")
+    	log.Debugf("ddd%d", 444)
+    	log.Info("aaa")
+    	log.Infof("aaa%d", 111)
     
     	//will no show
-    	glogger.SetLevel(glogger.LevelError)
-    	glogger.Warn("bbb")
-    	glogger.Warnf("bbb%d", 222)
+    	log.SetLevel(log.LevelError)
+    	log.Warn("bbb")
+    	log.Warnf("bbb%d", 222)
     
     	//will show
-    	glogger.Error("ccc")
-    	glogger.Errorf("ccc%d", 333)
-    	glogger.Fatal("eee")
-    	glogger.Fatalf("eee%d", 555)
+    	log.Error("ccc")
+    	log.Errorf("ccc%d", 333)
+    	log.Fatal("eee")
+    
+    	//will not show
+    	log.Fatalf("eee%d", 555)
     }
+
 
 and output like this:
 
@@ -42,7 +47,6 @@ and output like this:
     2016-04-05 19:42:35 ▶ ERR ccc
     2016-04-05 19:42:35 ▶ ERR ccc333
     2016-04-05 19:42:35 ▶ FAT eee
-    2016-04-05 19:42:35 ▶ FAT eee555
 Install
 =============
 `go get github.com/justgolang/glogger`  

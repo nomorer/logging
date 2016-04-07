@@ -6,33 +6,47 @@ import (
 )
 
 const (
-	dailyDateFormat = "2006-01-02"
+	DailyRotate = iota
+	HourlyRotate
+)
+
+const (
+	dailyDateFormat  = "2006-01-02"
+	hourlyDateFormat = "2006-01-02_15"
 )
 
 type (
-	RotateRule interface {
-		ShallRotate() bool
-		SetRotateTime()
-		GetBackupFilename(filename string) string
-	}
-
-	DailyRotateRule struct {
+	RotateRule struct {
+		rotateType int
 		rotateTime string
 	}
 )
 
-func (drr *DailyRotateRule) ShallRotate() bool {
-	return drr.rotateTime != getCurrentDailyFormatDate() && len(drr.rotateTime) > 0
+func NewRotateRule(rotateType int) *RotateRule {
+	return &RotateRule{
+		rotateTime: getFormatDate(rotateType),
+	}
 }
 
-func (drr *DailyRotateRule) SetRotateTime() {
-	drr.rotateTime = getCurrentDailyFormatDate()
+func (rr *RotateRule) ShallRotate() bool {
+	return rr.rotateTime != getFormatDate(rr.rotateType) && len(rr.rotateTime) > 0
 }
 
-func (drr *DailyRotateRule) GetBackupFilename(filename string) string {
-	return fmt.Sprintf("%s-%s", filename, getCurrentDailyFormatDate())
+func (rr *RotateRule) SetRotateTime() {
+	rr.rotateTime = getFormatDate(rr.rotateType)
 }
 
-func getCurrentDailyFormatDate() string {
-	return time.Now().Format(dailyDateFormat)
+func (rr *RotateRule) GetBackupFilename(filename string) string {
+	return fmt.Sprintf("%s-%s", filename, getFormatDate(rr.rotateType))
+}
+
+func getFormatDate(rotateType int) string {
+	switch rotateType {
+	case HourlyRotate:
+		return time.Now().Format(hourlyDateFormat)
+	case DailyRotate:
+		return time.Now().Format(dailyDateFormat)
+	default:
+		return time.Now().Format(dailyDateFormat)
+	}
 }

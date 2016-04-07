@@ -3,8 +3,8 @@ package glogger
 import (
 	"fmt"
 	"log"
-	"time"
 	"os"
+	"time"
 )
 
 const (
@@ -68,9 +68,9 @@ func Fatalf(format string, v ...interface{}) {
 	os.Exit(1)
 }
 
-func Setup(path string, level int) error {
+func Setup(path string, level, rotateType int) error {
 	var err error
-	if writer, err = NewRotateLogger(path, level); err != nil {
+	if writer, err = NewRotateLogger(path, level, rotateType); err != nil {
 		return err
 	}
 	return nil

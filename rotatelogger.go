@@ -20,7 +20,7 @@ type (
 	RotateLogger struct {
 		filename       string
 		backupFilename string
-		rule           RotateRule
+		rule           *RotateRule
 
 		level int
 
@@ -32,15 +32,13 @@ type (
 	}
 )
 
-func NewRotateLogger(filename string, level int) (*RotateLogger, error) {
+func NewRotateLogger(filename string, level, rotateType int) (*RotateLogger, error) {
 	l := &RotateLogger{
 		filename: filename,
-		rule: &DailyRotateRule{
-			rotateTime: getCurrentDailyFormatDate(),
-		},
-		level: level,
-		msg:   make(chan []byte, bufferSize),
-		done:  make(chan bool),
+		rule:     NewRotateRule(rotateType),
+		level:    level,
+		msg:      make(chan []byte, bufferSize),
+		done:     make(chan bool),
 	}
 
 	if err := l.init(); err != nil {
