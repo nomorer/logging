@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"time"
+	"os"
 )
 
 const (
@@ -57,10 +58,12 @@ func Errorf(format string, v ...interface{}) {
 
 func Fatal(v ...interface{}) {
 	output(LevelFatal, fmt.Sprintln(v...))
+	os.Exit(1)
 }
 
 func Fatalf(format string, v ...interface{}) {
 	output(LevelFatal, fmt.Sprintln(fmt.Sprintf(format, v...)))
+	os.Exit(1)
 }
 
 func Setup(path string, level int) error {
