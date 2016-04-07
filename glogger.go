@@ -78,12 +78,12 @@ func SetLevel(level int) {
 	writer.SetLevel(level)
 }
 
-func GetLevel(level int) int {
-	return writer.GetLevel()
+func Level(level int) int {
+	return writer.Level()
 }
 
 func output(level int, content string) {
-	if level < writer.GetLevel() {
+	if level < writer.Level() {
 		return
 	}
 

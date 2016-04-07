@@ -144,7 +144,7 @@ func (rl *RotateLogger) SetLevel(level int) {
 	rl.level = level
 }
 
-func (rl *RotateLogger) GetLevel() int {
+func (rl *RotateLogger) Level() int {
 	return rl.level
 }
 
