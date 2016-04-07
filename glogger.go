@@ -58,11 +58,13 @@ func Errorf(format string, v ...interface{}) {
 
 func Fatal(v ...interface{}) {
 	output(LevelFatal, fmt.Sprintln(v...))
+	writer.Close()
 	os.Exit(1)
 }
 
 func Fatalf(format string, v ...interface{}) {
 	output(LevelFatal, fmt.Sprintln(fmt.Sprintf(format, v...)))
+	writer.Close()
 	os.Exit(1)
 }
 
