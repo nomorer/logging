@@ -6,14 +6,16 @@ import (
 )
 
 const (
-	DailyRotate = iota
+	MonthlyRotate = iota
+	DailyRotate
 	HourlyRotate
 	MinutelyRotate
 )
 
 const (
-	dailyDateFormat  = "2006-01-02"
-	hourlyDateFormat = "2006-01-02_15"
+	monthlyDateFormat    = "2006-01"
+	dailyDateFormat      = "2006-01-02"
+	hourlyDateFormat     = "2006-01-02_15"
 	minutelyRotateFormat = "2006-01-02_15-04"
 )
 
@@ -45,10 +47,12 @@ func (rr *RotateRule) GetBackupFilename(filename string) string {
 
 func getFormatDate(rotateType int) string {
 	switch rotateType {
-	case HourlyRotate:
-		return time.Now().Format(hourlyDateFormat)
+	case MonthlyRotate:
+		return time.Now().Format(monthlyDateFormat)
 	case DailyRotate:
 		return time.Now().Format(dailyDateFormat)
+	case HourlyRotate:
+		return time.Now().Format(hourlyDateFormat)
 	case MinutelyRotate:
 		return time.Now().Format(minutelyRotateFormat)
 	default:

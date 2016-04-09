@@ -20,15 +20,12 @@ type (
 	RotateLogger struct {
 		filename       string
 		backupFilename string
+		level          int
 		rule           *RotateRule
-
-		level int
-
-		fp   *os.File
-		msg  chan []byte
-		done chan bool
-
-		waitGroup sync.WaitGroup
+		fp             *os.File
+		msg            chan []byte
+		done           chan bool
+		waitGroup      sync.WaitGroup
 	}
 )
 
