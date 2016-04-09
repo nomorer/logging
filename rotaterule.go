@@ -8,11 +8,13 @@ import (
 const (
 	DailyRotate = iota
 	HourlyRotate
+	MinutelyRotate
 )
 
 const (
 	dailyDateFormat  = "2006-01-02"
 	hourlyDateFormat = "2006-01-02_15"
+	minutelyRotateFormat = "2006-01-02_15-04"
 )
 
 type (
@@ -24,6 +26,7 @@ type (
 
 func NewRotateRule(rotateType int) *RotateRule {
 	return &RotateRule{
+		rotateType: rotateType,
 		rotateTime: getFormatDate(rotateType),
 	}
 }
@@ -46,6 +49,8 @@ func getFormatDate(rotateType int) string {
 		return time.Now().Format(hourlyDateFormat)
 	case DailyRotate:
 		return time.Now().Format(dailyDateFormat)
+	case MinutelyRotate:
+		return time.Now().Format(minutelyRotateFormat)
 	default:
 		return time.Now().Format(dailyDateFormat)
 	}
