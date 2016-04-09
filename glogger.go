@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"time"
+	"errors"
 )
 
 const (
@@ -13,14 +14,16 @@ const (
 	LevelWarn
 	LevelError
 	LevelFatal
+)
 
+const (
 	defaultTimeFormat   = "2006-01-02 15:04:05"
-	defaultformatString = "%s ▶ %.3s %s"
+	defaultPrefixFormat = "%s ▶ %.3s %s"
 )
 
 var (
 	// higher means more serious, log level : DEBUG < INFO < WARN < ERROR < FATAL
-	LevelName [5]string = [5]string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
+	levelNames [5]string = [5]string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
 	writer    *RotateLogger
 )
 
@@ -69,6 +72,13 @@ func Fatalf(format string, v ...interface{}) {
 }
 
 func Setup(path string, level, rotateType int) error {
+	if level < LevelDebug || level > LevelFatal {
+		return errors.New("None Exist Level")
+	}
+
+	if rotateType < DailyRotate || level > HourlyRotate {
+		return errors.New("None Exist Rotate Type")
+	}
 	var err error
 	if writer, err = NewRotateLogger(path, level, rotateType); err != nil {
 		return err
@@ -90,7 +100,7 @@ func output(level int, content string) {
 	}
 
 	//the writer may be close
-	logContent := fmt.Sprintf(defaultformatString, time.Now().Format(defaultTimeFormat), LevelName[level], content)
+	logContent := fmt.Sprintf(defaultPrefixFormat, time.Now().Format(defaultTimeFormat), levelNames[level], content)
 	if writer != nil {
 		buf := make([]byte, len(logContent))
 		copy(buf, logContent)
