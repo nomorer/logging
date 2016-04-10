@@ -59,10 +59,10 @@ By executing the above code, that is rotate minutely, you will get output like t
 and will generate at least two files: `access.log` as current log file, `access.log-2006-01-02_15-04` as backup log file.
 Features
 =============
-
 * Logging in File with rotation
 * Logging with levels
 * Enable/disable Logger
+
 Levels
 =============
 *   Debug
@@ -70,12 +70,14 @@ Levels
 *   Warn
 *   Error
 *   Fatal (in this case program will panic)
+
 RotateRules
 =============
 *	MonthlyRotate
 *	DailyRotate
 *	HourlyRotate
 *	MinutelyRotate
+
 Installation
 =============
 `go get github.com/justgolang/glogger`  
