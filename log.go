@@ -90,7 +90,7 @@ func SetLevel(level int) {
 	writer.SetLevel(level)
 }
 
-func Level(level int) int {
+func Level() int {
 	return writer.Level()
 }
 
@@ -108,7 +108,6 @@ func output(level int, content string) {
 	} else {
 		log.Print(logContent)
 	}
-
 }
 
 func Close() error {
