@@ -45,7 +45,7 @@ Getting Started
     	log.Fatalf("eee%d", 555)
     }
 
-By executing the above code, that is rotate minutely, you will get output like this:
+By executing the code above, that is rotate minutely, you will get output like this:
 
     2016-04-10 22:41:31 ▶ DEB ddd
     2016-04-10 22:41:31 ▶ DEB ddd444
@@ -69,7 +69,7 @@ Levels
 *   Info
 *   Warn
 *   Error
-*   Fatal (in this case program will panic)
+*   Fatal (in this case program will exit)
 
 RotateRules
 =============
