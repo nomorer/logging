@@ -20,7 +20,7 @@ type (
 	RotateLogger struct {
 		filename       string
 		backupFilename string
-		level          int
+		level          Level
 		rule           *RotateRule
 		fp             *os.File
 		msg            chan []byte
@@ -29,7 +29,7 @@ type (
 	}
 )
 
-func NewRotateLogger(filename string, level, rotateType int) (*RotateLogger, error) {
+func NewRotateLogger(filename string, level Level, rotateType int) (*RotateLogger, error) {
 	l := &RotateLogger{
 		filename: filename,
 		rule:     NewRotateRule(rotateType),
@@ -135,11 +135,11 @@ func (rl *RotateLogger) write(content []byte) {
 	}
 }
 
-func (rl *RotateLogger) SetLevel(level int) {
+func (rl *RotateLogger) SetLevel(level Level) {
 	rl.level = level
 }
 
-func (rl *RotateLogger) Level() int {
+func (rl *RotateLogger) GetLevel() Level {
 	return rl.level
 }
 

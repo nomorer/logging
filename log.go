@@ -1,19 +1,11 @@
 package glogger
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
 	"time"
-	"errors"
-)
-
-const (
-	LevelDebug = iota
-	LevelInfo
-	LevelWarn
-	LevelError
-	LevelFatal
 )
 
 const (
@@ -21,11 +13,7 @@ const (
 	defaultPrefixFormat = "%s ▶ %.3s %s"
 )
 
-var (
-	// higher means more serious, log level : DEBUG < INFO < WARN < ERROR < FATAL
-	levelNames [5]string = [5]string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
-	writer    *RotateLogger
-)
+var writer *RotateLogger
 
 func Debug(v ...interface{}) {
 	output(LevelDebug, fmt.Sprintln(v...))
@@ -71,7 +59,7 @@ func Fatalf(format string, v ...interface{}) {
 	os.Exit(1)
 }
 
-func Setup(path string, level, rotateType int) error {
+func Setup(path string, level Level, rotateType int) error {
 	if level < LevelDebug || level > LevelFatal {
 		return errors.New("None Exist Level")
 	}
@@ -86,21 +74,21 @@ func Setup(path string, level, rotateType int) error {
 	return nil
 }
 
-func SetLevel(level int) {
+func SetLevel(level Level) {
 	writer.SetLevel(level)
 }
 
-func Level() int {
-	return writer.Level()
+func GetLevel() string {
+	return writer.GetLevel().String()
 }
 
-func output(level int, content string) {
-	if level < writer.Level() {
+func output(level Level, content string) {
+	if level < writer.level {
 		return
 	}
 
 	//the writer may be close
-	logContent := fmt.Sprintf(defaultPrefixFormat, time.Now().Format(defaultTimeFormat), levelNames[level], content)
+	logContent := fmt.Sprintf(defaultPrefixFormat, time.Now().Format(defaultTimeFormat), level.String(), content)
 	if writer != nil {
 		buf := make([]byte, len(logContent))
 		copy(buf, logContent)
