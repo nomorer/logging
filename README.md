@@ -62,6 +62,7 @@ Features
 * Logging in File with rotation
 * Logging with levels
 * Enable/disable Logger
+* Automatic word wrapping
 
 Levels
 =============
