@@ -1,9 +1,5 @@
 package glogger
 
-import (
-	"fmt"
-)
-
 type Level int
 
 //level constants
@@ -17,25 +13,18 @@ const (
 )
 
 func (l Level) String() string {
-	if levelStr, err := l.string(); err == nil {
-		return levelStr
-	}
-	return "<NA>"
-}
-
-func (l Level) string() (string, error) {
 	switch l {
 	case LevelDebug:
-		return "DEBUG", nil
+		return "DEBUG"
 	case LevelInfo:
-		return "INFO", nil
+		return "INFO"
 	case LevelWarn:
-		return "WARN", nil
+		return "WARN"
 	case LevelError:
-		return "ERROR", nil
+		return "ERROR"
 	case LevelFatal:
-		return "FATAL", nil
+		return "FATAL"
 	default:
-		return "", fmt.Errorf("Unknown Level: %d", int(l))
+		return "<NA>"
 	}
 }

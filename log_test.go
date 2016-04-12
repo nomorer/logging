@@ -11,12 +11,12 @@ func TestSetup(t *testing.T) {
 		t.Errorf("Error at Setup log: %v", err)
 	}
 
-	if Level() != LevelDebug {
+	if GetLevel() != LevelDebug {
 		t.Error("Error at Level()")
 	}
 
 	SetLevel(LevelInfo)
-	if Level() != LevelInfo {
+	if GetLevel() != LevelInfo {
 		t.Error("Error at SetLevel()")
 	}
 
