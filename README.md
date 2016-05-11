@@ -1,4 +1,4 @@
-Package glogger provides a simple logger with level and log rotation for Go.
+Package glog provides a simple logger with level and log rotation for Go.
 Getting Started
 =============
     package main
@@ -81,5 +81,5 @@ RotateRules
 
 Installation
 =============
-`go get github.com/justgolang/glogger`  
+`go get github.com/justgolang/glog`  
 use `go get -u` to update the package.  
