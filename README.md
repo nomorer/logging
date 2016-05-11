@@ -5,7 +5,7 @@ Getting Started
     
     import (
     	"fmt"
-    	log "github.com/justgolang/glogger"
+    	log "github.com/justgolang/glog"
     	"time"
     )
     
