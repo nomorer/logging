@@ -5,7 +5,7 @@ Getting Started
     
     import (
     	"fmt"
-    	log "github.com/justgolang/glog"
+    	log "github.com/justgolang/logging"
     	"time"
     )
     
@@ -74,12 +74,12 @@ Levels
 
 RotateRules
 =============
-*	MonthlyRotate
-*	DailyRotate
-*	HourlyRotate
-*	MinutelyRotate
+*	MonthlyRotate (rotate the logs monthly)
+*	DailyRotate (rotate the logs daily)
+*	HourlyRotate (rotate the logs hourly)
+*	MinutelyRotate (rotate the logs minutely)
 
 Installation
 =============
-`go get github.com/justgolang/glog`  
+`go get github.com/justgolang/logging`  
 use `go get -u` to update the package.  
