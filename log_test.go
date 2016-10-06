@@ -1,13 +1,13 @@
-package glog
+package logging
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 func TestSetup(t *testing.T) {
-	path:= "/tmp/test_glogger"
-	if err := Setup(path, LevelDebug, DailyRotate);err != nil {
+	path := "/tmp/test_glogger"
+	if err := Setup(path, LevelDebug, DailyRotate); err != nil {
 		t.Errorf("Error at Setup log: %v", err)
 	}
 

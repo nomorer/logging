@@ -1,4 +1,4 @@
-package glog
+package logging
 
 type Level int
 

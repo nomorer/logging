@@ -1,4 +1,4 @@
-Package glog provides a simple logger with level and log rotation for Go.
+package logging provides a simple logger with level and log rotation for Go.
 Getting Started
 =============
     package main
